@@ -1,16 +1,10 @@
 ﻿using _02;
+using Shared;
 
-var fileName = args.Length > 0
-    ? args[0]
-    : throw new InvalidOperationException("File name must be provided as the first argument");
-if (!File.Exists(fileName)) throw new FileNotFoundException($"Could not find file {fileName}");
-
-var data = await File.ReadAllTextAsync(fileName);
-var lines = data.Split('\n', '\r').Where(line => !string.IsNullOrWhiteSpace(line));
+var lines = await InputHelper.ParseLinesFromFileInArgs(args);
 
 var gameParser = new GameParser();
-
-var game = lines.Select(gameParser.Parse).ToList();
+var games = lines.Select(gameParser.Parse).ToList();
 
 var check = new Dictionary<string, int>()
 {
@@ -19,8 +13,8 @@ var check = new Dictionary<string, int>()
     { "blue", 14 }
 };
 
-var part1Sum = Part1.Run(game, check);
-var part2Sum = Part2.Run(game);
+var part1Sum = Part1.Run(games, check);
+var part2Sum = Part2.Run(games);
 
 Console.WriteLine("Got part 1 sum: {0}", part1Sum);
 Console.WriteLine("Got part 2 sum: {0}", part2Sum);
