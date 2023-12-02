@@ -3,26 +3,34 @@ using _02.Models;
 
 namespace _02;
 
-public class GameParser
+public partial class GameParser
 {
+    [GeneratedRegex("^Game (\\d+): (.+)$")]
+    private static partial Regex GameResultsRegex();
+    [GeneratedRegex(@"(\d+) (\w+)")]
+    private static partial Regex SingleResultRegex();
+    
     public Game Parse(string line)
     {
-        var lineRegex = new Regex("^Game (\\d+): (.+)$");
+        var lineRegex = GameResultsRegex();
 
         var match = lineRegex.Match(line);
         if (!match.Success) throw new ArgumentException("Line is not formatted correctly");
         var groups = match.Groups;
 
         var id = int.Parse(groups[1].Value);
-        var rounds = groups[2].Value.Split(";").Select(str => str.Trim()).Select(ParseRound).ToList();
+        var rounds = groups[2].Value
+            .Split(";")
+            .Select(str => ParseRound(str.Trim()))
+            .ToList();
         
         return new Game(id, rounds);
     }
 
-    private Round ParseRound(string text)
+    private static Round ParseRound(string text)
     {
         var roundResults = text.Split(",");
-        var lineRegex = new Regex("(\\d+) (\\w+)");
+        var lineRegex = SingleResultRegex();
 
         var colorCounts = new Dictionary<string, int>();
 

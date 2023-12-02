@@ -10,7 +10,7 @@ var lines = data.Split('\n', '\r').Where(line => !string.IsNullOrWhiteSpace(line
 
 var gameParser = new GameParser();
 
-var x = lines.Select(gameParser.Parse).ToList();
+var game = lines.Select(gameParser.Parse).ToList();
 
 var check = new Dictionary<string, int>()
 {
@@ -19,15 +19,8 @@ var check = new Dictionary<string, int>()
     { "blue", 14 }
 };
 
-long part1Sum = 0;
-long part2Sum = 0;
-foreach (var game in x)
-{
-    if (game.IsCubesPossible(check)) part1Sum += game.Id;
-
-    var power = game.MaxPerColor.Values.Aggregate(1, (acc, cur) => acc * cur);
-    part2Sum += power;
-}
+var part1Sum = Part1.Run(game, check);
+var part2Sum = Part2.Run(game);
 
 Console.WriteLine("Got part 1 sum: {0}", part1Sum);
 Console.WriteLine("Got part 2 sum: {0}", part2Sum);

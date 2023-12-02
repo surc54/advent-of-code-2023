@@ -2,9 +2,11 @@ namespace _02.Models;
 
 public record Game
 {
-    public int Id { get; init; }
-    public ICollection<Round> Rounds { get; init; }
-    public Dictionary<string, int> MaxPerColor = new();
+    private readonly Dictionary<string, int> _maxPerColor = new();
+    
+    public int Id { get; }
+    private ICollection<Round> Rounds { get; }
+    public long MinimumCubePower => _maxPerColor.Values.Aggregate(1L, (acc, cur) => acc * cur);
     
     public Game(int Id, ICollection<Round> Rounds)
     {
@@ -15,13 +17,13 @@ public record Game
         {
             foreach (var (color, count) in round.CubesByColor)
             {
-                if (MaxPerColor.TryGetValue(color, out var value))
+                if (_maxPerColor.TryGetValue(color, out var value))
                 {
-                    if (value < count) MaxPerColor[color] = count;
+                    if (value < count) _maxPerColor[color] = count;
                 }
                 else
                 {
-                    MaxPerColor.Add(color, count);
+                    _maxPerColor.Add(color, count);
                 }
             }
         }
@@ -31,7 +33,7 @@ public record Game
     {
         foreach (var (color, count) in dict)
         {
-            if (!MaxPerColor.TryGetValue(color, out var maxSeenCount))
+            if (!_maxPerColor.TryGetValue(color, out var maxSeenCount))
             {
                 return false;
             }
