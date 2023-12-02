@@ -19,10 +19,15 @@ var check = new Dictionary<string, int>()
     { "blue", 14 }
 };
 
-long sum = 0;
+long part1Sum = 0;
+long part2Sum = 0;
 foreach (var game in x)
 {
-    if (game.IsCubesPossible(check)) sum += game.Id;
+    if (game.IsCubesPossible(check)) part1Sum += game.Id;
+
+    var power = game.MaxPerColor.Values.Aggregate(1, (acc, cur) => acc * cur);
+    part2Sum += power;
 }
 
-Console.WriteLine("Got sum: {0}", sum);
+Console.WriteLine("Got part 1 sum: {0}", part1Sum);
+Console.WriteLine("Got part 2 sum: {0}", part2Sum);

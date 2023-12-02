@@ -4,7 +4,7 @@ public record Game
 {
     public int Id { get; init; }
     public ICollection<Round> Rounds { get; init; }
-    private Dictionary<string, int> maxPerColor = new();
+    public Dictionary<string, int> MaxPerColor = new();
     
     public Game(int Id, ICollection<Round> Rounds)
     {
@@ -15,13 +15,13 @@ public record Game
         {
             foreach (var (color, count) in round.CubesByColor)
             {
-                if (maxPerColor.TryGetValue(color, out var value))
+                if (MaxPerColor.TryGetValue(color, out var value))
                 {
-                    if (value < count) maxPerColor[color] = count;
+                    if (value < count) MaxPerColor[color] = count;
                 }
                 else
                 {
-                    maxPerColor.Add(color, count);
+                    MaxPerColor.Add(color, count);
                 }
             }
         }
@@ -31,7 +31,7 @@ public record Game
     {
         foreach (var (color, count) in dict)
         {
-            if (!maxPerColor.TryGetValue(color, out var maxSeenCount))
+            if (!MaxPerColor.TryGetValue(color, out var maxSeenCount))
             {
                 return false;
             }
