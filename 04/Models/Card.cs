@@ -5,6 +5,7 @@ public record Card
     public int Id { get; init; }
     public HashSet<int> WinningNumbers { get; init; }
     public HashSet<int> MyNumbers { get; init; }
+    public int MatchingCount { get; }
     public int Points { get; }
     
     public Card(int Id, HashSet<int> WinningNumbers, HashSet<int> MyNumbers)
@@ -12,6 +13,7 @@ public record Card
         this.Id = Id;
         this.WinningNumbers = WinningNumbers;
         this.MyNumbers = MyNumbers;
+        this.MatchingCount = GetCommonNumbers().Count;
         this.Points = CalculatePoints();
     }
 
@@ -24,8 +26,7 @@ public record Card
 
     private int CalculatePoints()
     {
-        var common = GetCommonNumbers();
-        if (common.Count == 0) return 0;
-        return (int)Math.Pow(2, common.Count - 1);
+        if (MatchingCount == 0) return 0;
+        return (int)Math.Pow(2, MatchingCount - 1);
     }
 }
