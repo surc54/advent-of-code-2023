@@ -13,16 +13,20 @@ public record Map(string SourceType, string DestinationType, IEnumerable<Map.Ran
         {
             return value >= SourceStart && value <= SourceEnd;
         }
+
+        public long GetDestinationValueForSource(long value)
+        {
+            var offset = value - SourceStart;
+            return DestinationStart + offset;
+        }
     }
-    
+
     public long Get(long value)
     {
         foreach (var range in Ranges)
         {
             if (!range.ContainsSource(value)) continue;
-
-            var offset = value - range.SourceStart;
-            return range.DestinationStart + offset;
+            return range.GetDestinationValueForSource(value);
         }
 
         return value;
