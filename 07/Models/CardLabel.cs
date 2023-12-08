@@ -2,6 +2,7 @@ namespace _07.Models;
 
 public enum CardLabel
 {
+    JOKER = -1,
     TWO = 0,
     THREE = 1,
     FOUR = 2,
